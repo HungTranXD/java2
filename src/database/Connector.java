@@ -10,10 +10,21 @@ public class Connector {
 
     private Connection conn;
 
-    public Connector() throws Exception{
+    //Áp dụng singleton
+    private static Connector instance;
+
+    public static Connector getInstance() throws Exception{
+        if(instance == null) {
+            instance = new Connector();
+        }
+        return instance;
+    }
+
+    private Connector() throws Exception{
             Class.forName("com.mysql.jdbc.Driver");
             this.conn = DriverManager.getConnection(connectionString, user, pwd);
     }
+    //Hết áp dụng singleton
 
     private Statement getStatement() throws Exception {
         return this.conn.createStatement();

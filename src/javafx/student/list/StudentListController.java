@@ -2,6 +2,7 @@ package javafx.student.list;
 
 import database.Connector;
 import entities.Student;
+import impls.StudentRepository;
 import javafx.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +28,10 @@ public class StudentListController implements Initializable {
     public TableColumn<Student, Button> cAction;
     public TextField txtSearch;
 
+    //Demo i18n
+    public Button btnSearch;
+    public Button btnAdd;
+
     private ObservableList<Student> ls = FXCollections.observableArrayList();
 
     @Override
@@ -37,20 +42,19 @@ public class StudentListController implements Initializable {
         cGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
         cAction.setCellValueFactory(new PropertyValueFactory<>("edit"));
 
-        try {
-            Connector connector = new Connector();
-            String sql = "SELECT * FROM students";
-            ResultSet rs = connector.query(sql);
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                int mark = rs.getInt("mark");
-                String gender = rs.getString("gender");
+        //Demo i18n
+        btnSearch.setText(Main._msg.getString("search"));
+        btnAdd.setText(Main._msg.getString("add"));
+        cName.setText(Main._msg.getString("name"));
+        cEmail.setText(Main._msg.getString("email"));
+        cMark.setText(Main._msg.getString("mark"));
+        cGender.setText(Main._msg.getString("gender"));
+        cAction.setText(Main._msg.getString("action"));
 
-                Student s = new Student(id, name, email, mark, gender);
-                ls.add(s);
-            }
+
+        try {
+            StudentRepository sr = new StudentRepository();
+            ls.addAll(sr.all());
             tbStudents.setItems(ls);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

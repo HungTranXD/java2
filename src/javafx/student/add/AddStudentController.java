@@ -3,6 +3,9 @@ package javafx.student.add;
 
 import database.Connector;
 import entities.Student;
+import enums.RepoType;
+import factory.Factory;
+import impls.StudentRepository;
 import javafx.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+import java.net.ConnectException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -51,14 +55,10 @@ public class AddStudentController implements Initializable {
             Student s = new Student(null, txtName.getText(), txtEmail.getText(), mark, cbGender.getValue());
 
             //Add student to database
-            Connector connector = new Connector();
-            String sql_txt = "INSERT INTO students(name, email, mark, gender) VALUES (?, ?, ?, ?)";
-            ArrayList parameters = new ArrayList();
-            parameters.add(s.getName());
-            parameters.add(s.getEmail());
-            parameters.add(s.getMark());
-            parameters.add(s.getGender());
-            if(connector.execute(sql_txt,parameters)){
+            StudentRepository sr = (StudentRepository) Factory.createRepository(RepoType.STUDENT);
+
+            if(sr.create(s)){
+                //Nếu thêm được thì quay trở lại
                 backToListPage(null);
                 return;
             }
