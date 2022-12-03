@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import practiceExam.Book;
 import practiceExam.Main;
+import practiceExam.add.AddController;
 
 import java.io.*;
 import java.net.URL;
@@ -54,6 +55,11 @@ public class ListController implements Initializable {
 
     @FXML
     void add(ActionEvent event) throws Exception{
+        AddController.existedIds.clear();
+        for (Book b: allBooks) {
+            AddController.existedIds.add(b.getId());
+        }
+
         Parent root = FXMLLoader.load(getClass().getResource("../add/add.fxml"));
         Main.rootStage.setTitle("Add book");
         Main.rootStage.setScene(new Scene(root, 600, 400));

@@ -11,6 +11,7 @@ import practiceExam.Book;
 import practiceExam.Main;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class AddController {
     @FXML
@@ -24,6 +25,8 @@ public class AddController {
 
     @FXML
     private TextField txtAuthor;
+
+    public static ArrayList<String> existedIds = new ArrayList<>();
 
     @FXML
     void goBack(ActionEvent event) throws Exception{
@@ -41,6 +44,9 @@ public class AddController {
             if (txtPrice.getText().isEmpty()) throw new Exception("Price is empty");
 
             String id = txtId.getText();
+            for (String s: existedIds) {
+                if (s.equals(id)) throw new Exception("Book ID already existed");
+            }
             String name = txtName.getText();
             String author = txtAuthor.getText();
             Double price = Double.parseDouble(txtPrice.getText());
